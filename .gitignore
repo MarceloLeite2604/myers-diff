@@ -1,0 +1,6 @@
+# Output directory
+target
+
+# IntelliJ files
+*.iml
+.idea
