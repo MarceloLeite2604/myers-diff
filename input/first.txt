@@ -1,0 +1,3 @@
+This line is equal on both files.
+This line has a slight difference on both files.
+This line does not exist on second file.

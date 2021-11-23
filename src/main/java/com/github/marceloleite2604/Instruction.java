@@ -3,6 +3,7 @@ package com.github.marceloleite2604;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
+@EqualsAndHashCode
 public class Instruction {
 
     private final Operation operation;
@@ -20,7 +22,7 @@ public class Instruction {
 
     private final PositionedCharacter secondOperator;
 
-    private Character retrieveText() {
+    public Character retrieveCharacter() {
         return Optional.ofNullable(firstOperator)
             .map(PositionedCharacter::getCharacter)
             .orElseGet(() -> Optional.ofNullable(secondOperator)
@@ -36,6 +38,14 @@ public class Instruction {
         return retrieveOperatorPosition(secondOperator);
     }
 
+    public Character retrieveFirstCharacter() {
+        return firstOperator.getCharacter();
+    }
+
+    public Character retrieveSecondCharacter() {
+        return secondOperator.getCharacter();
+    }
+
     private String retrieveOperatorPosition(PositionedCharacter operator) {
         return Optional.ofNullable(operator)
             .map(PositionedCharacter::retrievePosition)
@@ -49,6 +59,6 @@ public class Instruction {
             " " +
             retrieveSecondPosition() +
             " " +
-            retrieveText();
+            retrieveCharacter();
     }
 }

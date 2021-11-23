@@ -1,6 +1,6 @@
 package com.github.marceloleite2604;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DiffElaborator {
@@ -8,22 +8,20 @@ public class DiffElaborator {
     public List<Instruction> elaborate(final String first, final String second) {
 
         var context = Context.builder()
-            .first(first)
-            .second(second)
-            .build();
+                .first(first)
+                .second(second)
+                .build();
 
         elaborateTrace(context);
         elaborateSteps(context);
         elaborateInstructions(context);
 
-
+        return context.getInstructions();
     }
 
-    private void elaborateInstructions(Context context) {
+    private Context elaborateInstructions(Context context) {
         char firstCharacter = 0;
         char secondCharacter = 0;
-
-        List<Instruction> instructions = new ArrayList<>();
 
         for (Step step : context.getSteps()) {
             if (step.getToX() > 0) {
@@ -34,38 +32,38 @@ public class DiffElaborator {
             }
 
             var firstOperator = PositionedCharacter.builder()
-                .position(step.getToX())
-                .character(firstCharacter)
-                .build();
+                    .position(step.getToX())
+                    .character(firstCharacter)
+                    .build();
 
             var secondOperator = PositionedCharacter.builder()
-                .position(step.getToY())
-                .character(secondCharacter)
-                .build();
+                    .position(step.getToY())
+                    .character(secondCharacter)
+                    .build();
 
             Instruction instruction;
             if (step.getToX() == step.getFromX()) {
                 instruction = Instruction.builder()
-                    .operation(Operation.INSERT)
-                    .secondOperator(secondOperator)
-                    .build();
+                        .operation(Operation.INSERT)
+                        .secondOperator(secondOperator)
+                        .build();
             } else if (step.getToY() == step.getFromY()) {
                 instruction = Instruction.builder()
-                    .operation(Operation.DELETE)
-                    .firstOperator(firstOperator)
-                    .build();
+                        .operation(Operation.DELETE)
+                        .firstOperator(firstOperator)
+                        .build();
             } else {
                 instruction = Instruction.builder()
-                    .operation(Operation.EQUAL)
-                    .firstOperator(firstOperator)
-                    .secondOperator(secondOperator)
-                    .build();
+                        .operation(Operation.EQUAL)
+                        .firstOperator(firstOperator)
+                        .secondOperator(secondOperator)
+                        .build();
             }
 
-            instructions.add(0, instruction);
+            context.addInstruction(instruction);
         }
 
-        return instructions;
+        return context;
     }
 
     private Context elaborateTrace(final Context context) {

@@ -68,4 +68,7 @@ public class Context {
         steps.add(0, step);
     }
 
+    public void addInstruction(Instruction instruction) {
+        instructions.add(instruction);
+    }
 }
